@@ -18,9 +18,9 @@ export default function Home() {
 
   // 🔄 Cargar datos
   const cargarDatos = async () => {
-    const resInq = await fetch("http://127.0.0.1:8000/inquilinos/");
-    const resAlertas = await fetch("http://127.0.0.1:8000/alertas/");
-    const resResumen = await fetch("http://127.0.0.1:8000/alertas/resumen");
+    const resInq = await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/");
+    const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
+    const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
 
     setInquilinos(await resInq.json());
     setAlertas(await resAlertas.json());
@@ -38,7 +38,7 @@ export default function Home() {
       return;
     }
 
-    await fetch("http://127.0.0.1:8000/inquilinos/", {
+    await fetch("https://rent-manager-6vrc.onrender.com//inquilinos/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export default function Home() {
 
   // ❌ Eliminar
   const eliminarInquilino = async (id) => {
-    await fetch(`http://127.0.0.1:8000/inquilinos/${id}`, {
+    await fetch(`https://rent-manager-6vrc.onrender.com/inquilinos/${id}`, {
       method: "DELETE",
     });
 
@@ -76,7 +76,7 @@ export default function Home() {
       return;
     }
 
-    await fetch(`http://127.0.0.1:8000/inquilinos/${editandoId}`, {
+    await fetch(`https://rent-manager-6vrc.onrender.com/inquilinos/${editandoId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
