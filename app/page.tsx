@@ -54,7 +54,7 @@ export default function Home() {
   };
 
   // ❌ Eliminar
-  const eliminarInquilino = async (id) => {
+  const eliminarInquilino = async (id: number) => {
     await fetch(`https://rent-manager-6vrc.onrender.com/inquilinos/${id}`, {
       method: "DELETE",
     });
@@ -63,7 +63,7 @@ export default function Home() {
   };
 
   // ✏️ Editar
-  const empezarEdicion = (inq) => {
+  const empezarEdicion = (inq: any) => {
     setEditandoId(inq.id);
     setEditNombre(inq.nombre);
     setEditEmail(inq.email);
