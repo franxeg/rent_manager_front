@@ -6,12 +6,11 @@ export default function Home() {
   const [inquilinos, setInquilinos] = useState([]);
   const [alertas, setAlertas] = useState([]);
   type Resumen = {total_contratos: number; vencidos: number; por_vencer: number;};
-
-const [resumen, setResumen] = useState<Resumen>({
+  const [resumen, setResumen] = useState<Resumen>({
   total_contratos: 0,
   vencidos: 0,
   por_vencer: 0,
-});
+  });
 
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
