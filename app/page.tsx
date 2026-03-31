@@ -45,7 +45,7 @@ export default function Home() {
       return;
     }
 
-    await fetch("https://rent-manager-6vrc.onrender.com//inquilinos/", {
+    await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
