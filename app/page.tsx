@@ -1,11 +1,6 @@
 // @ts-nocheck
 
-const [contratos, setContratos] = useState<any[]>([]);
 
-const [fechaInicio, setFechaInicio] = useState("");
-const [duracion, setDuracion] = useState("");
-const [monto, setMonto] = useState("");
-const [inquilinoId, setInquilinoId] = useState("");
 
 "use client";
 
@@ -25,6 +20,13 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
 
+  const [contratos, setContratos] = useState<any[]>([]);
+
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [duracion, setDuracion] = useState("");
+  const [monto, setMonto] = useState("");
+  const [inquilinoId, setInquilinoId] = useState("");
+
   const [editandoId, setEditandoId] = useState(null);
   const [editNombre, setEditNombre] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -36,6 +38,8 @@ export default function Home() {
   const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
   const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
   const resContratos = await fetch("https://rent-manager-6vrc.onrender.com/contratos/");
+  
+  
 
   setInquilinos(await resInq.json());
   setAlertas(await resAlertas.json());
@@ -246,69 +250,72 @@ export default function Home() {
               </button>
             </>
           )}
-          <h2>Contratos</h2>
+          
+        </div>
+      ))}
+      {/* ================= CONTRATOS ================= */}
 
-          {/* ➕ Crear contrato */}
-          <input
-            type="date"
-            value={fechaInicio}
-            onChange={(e) => setFechaInicio(e.target.value)}
-          />
+      <h2>Contratos</h2>
+
+      {/* ➕ Crear contrato */}
+      <input
+        type="date"
+        value={fechaInicio}
+        onChange={(e) => setFechaInicio(e.target.value)}
+      />
+      <br />
+
+      <input
+        placeholder="Duración (meses)"
+        value={duracion}
+        onChange={(e) => setDuracion(e.target.value)}
+      />
+      <br />
+
+      <input
+        placeholder="Monto"
+        value={monto}
+        onChange={(e) => setMonto(e.target.value)}
+      />
+      <br />
+
+      <select
+        value={inquilinoId}
+        onChange={(e) => setInquilinoId(e.target.value)}
+      >
+        <option value="">Seleccionar inquilino</option>
+        {inquilinos.map((inq) => (
+          <option key={inq.id} value={inq.id}>
+            {inq.nombre}
+          </option>
+        ))}
+      </select>
+      <br />
+
+      <button onClick={crearContrato}>Crear contrato</button>
+
+      {/* 📄 Lista contratos */}
+      {contratos.map((c) => (
+        <div
+          key={c.id}
+          style={{
+            border: "1px solid #ccc",
+            padding: "10px",
+            marginTop: "10px",
+          }}
+        >
+          <strong>{c.inquilino?.nombre || "Sin inquilino"}</strong>
+          <br />
+          Inicio: {c.fecha_inicio}
+          <br />
+          Duración: {c.duracion_meses} meses
+          <br />
+          Monto: ${c.monto}
           <br />
 
-          <input
-            placeholder="Duración (meses)"
-            value={duracion}
-            onChange={(e) => setDuracion(e.target.value)}
-          />
-          <br />
-
-          <input
-            placeholder="Monto"
-            value={monto}
-            onChange={(e) => setMonto(e.target.value)}
-          />
-          <br />
-
-          <select
-            value={inquilinoId}
-            onChange={(e) => setInquilinoId(e.target.value)}
-          >
-            <option value="">Seleccionar inquilino</option>
-            {inquilinos.map((inq) => (
-              <option key={inq.id} value={inq.id}>
-                {inq.nombre}
-              </option>
-            ))}
-          </select>
-          <br />
-
-          <button onClick={crearContrato}>Crear contrato</button>
-
-          {/* 📄 Lista */}
-          {contratos.map((c) => (
-            <div
-              key={c.id}
-              style={{
-                border: "1px solid #ccc",
-                padding: "10px",
-                marginTop: "10px",
-              }}
-            >
-              <strong>{c.inquilino?.nombre || "Sin inquilino"}</strong>
-              <br />
-              Inicio: {c.fecha_inicio}
-              <br />
-              Duración: {c.duracion_meses} meses
-              <br />
-              Monto: ${c.monto}
-              <br />
-
-              <button onClick={() => eliminarContrato(c.id)}>
-                Eliminar
-              </button>
-            </div>
-          ))}
+          <button onClick={() => eliminarContrato(c.id)}>
+            Eliminar
+          </button>
         </div>
       ))}
     </div>
