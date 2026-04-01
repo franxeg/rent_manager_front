@@ -169,7 +169,7 @@ export default function Home() {
     setEditandoId(null);
     cargarDatos();
   };
-
+  console.log("CONTRATOS:", contratos);
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h1 style={{ fontSize: "28px" }}>Dashboard</h1>
@@ -327,7 +327,7 @@ export default function Home() {
             marginTop: "10px",
           }}
         >
-          <strong>{c.inquilino?.nombre || "Sin inquilino"}</strong>
+          <strong>Inquilino ID: {c.inquilino_id}</strong>
           <br />
           Inicio: {c.fecha_inicio}
           <br />
