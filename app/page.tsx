@@ -1,5 +1,12 @@
 // @ts-nocheck
 
+const [contratos, setContratos] = useState<any[]>([]);
+
+const [fechaInicio, setFechaInicio] = useState("");
+const [duracion, setDuracion] = useState("");
+const [monto, setMonto] = useState("");
+const [inquilinoId, setInquilinoId] = useState("");
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,18 +32,55 @@ export default function Home() {
 
   // 🔄 Cargar datos
   const cargarDatos = async () => {
-    const resInq = await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/");
-    const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
-    const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
+  const resInq = await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/");
+  const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
+  const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
+  const resContratos = await fetch("https://rent-manager-6vrc.onrender.com/contratos/");
 
-    setInquilinos(await resInq.json());
-    setAlertas(await resAlertas.json());
-    setResumen(await resResumen.json());
+  setInquilinos(await resInq.json());
+  setAlertas(await resAlertas.json());
+  setResumen(await resResumen.json());
+  setContratos(await resContratos.json());
   };
 
   useEffect(() => {
     cargarDatos();
   }, []);
+
+  const crearContrato = async () => {
+    if (!fechaInicio || !duracion || !monto || !inquilinoId) {
+      alert("Completá todos los campos");
+      return;
+    }
+
+    await fetch("https://rent-manager-6vrc.onrender.com/contratos/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fecha_inicio: fechaInicio,
+        duracion_meses: Number(duracion),
+        monto: Number(monto),
+        inquilino_id: Number(inquilinoId),
+      }),
+    });
+
+    setFechaInicio("");
+    setDuracion("");
+    setMonto("");
+    setInquilinoId("");
+
+    cargarDatos();
+  };
+
+  const eliminarContrato = async (id: number) => {
+    await fetch(`https://rent-manager-6vrc.onrender.com/contratos/${id}`, {
+      method: "DELETE",
+    });
+
+    cargarDatos();
+  };
 
   // ➕ Crear
   const crearInquilino = async () => {
@@ -202,8 +246,76 @@ export default function Home() {
               </button>
             </>
           )}
+          <h2>Contratos</h2>
+
+          {/* ➕ Crear contrato */}
+          <input
+            type="date"
+            value={fechaInicio}
+            onChange={(e) => setFechaInicio(e.target.value)}
+          />
+          <br />
+
+          <input
+            placeholder="Duración (meses)"
+            value={duracion}
+            onChange={(e) => setDuracion(e.target.value)}
+          />
+          <br />
+
+          <input
+            placeholder="Monto"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
+          />
+          <br />
+
+          <select
+            value={inquilinoId}
+            onChange={(e) => setInquilinoId(e.target.value)}
+          >
+            <option value="">Seleccionar inquilino</option>
+            {inquilinos.map((inq) => (
+              <option key={inq.id} value={inq.id}>
+                {inq.nombre}
+              </option>
+            ))}
+          </select>
+          <br />
+
+          <button onClick={crearContrato}>Crear contrato</button>
+
+          {/* 📄 Lista */}
+          {contratos.map((c) => (
+            <div
+              key={c.id}
+              style={{
+                border: "1px solid #ccc",
+                padding: "10px",
+                marginTop: "10px",
+              }}
+            >
+              <strong>{c.inquilino?.nombre || "Sin inquilino"}</strong>
+              <br />
+              Inicio: {c.fecha_inicio}
+              <br />
+              Duración: {c.duracion_meses} meses
+              <br />
+              Monto: ${c.monto}
+              <br />
+
+              <button onClick={() => eliminarContrato(c.id)}>
+                Eliminar
+              </button>
+            </div>
+          ))}
         </div>
       ))}
     </div>
+    
+
+      
+
+
   );
 }
