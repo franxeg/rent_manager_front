@@ -34,17 +34,40 @@ export default function Home() {
 
   // 🔄 Cargar datos
   const cargarDatos = async () => {
-  const resInq = await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/");
-  const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
-  const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
-  const resContratos = await fetch("https://rent-manager-6vrc.onrender.com/contratos/");
-  
-  
+    try {
+      const resInq = await fetch("https://rent-manager-6vrc.onrender.com/inquilinos/");
+      const dataInq = await resInq.json();
+      setInquilinos(Array.isArray(dataInq) ? dataInq : []);
+    } catch (e) {
+      console.error("Error inquilinos", e);
+      setInquilinos([]);
+    }
 
-  setInquilinos(await resInq.json());
-  setAlertas(await resAlertas.json());
-  setResumen(await resResumen.json());
-  setContratos(await resContratos.json());
+    try {
+      const resAlertas = await fetch("https://rent-manager-6vrc.onrender.com/alertas/");
+      const dataAlertas = await resAlertas.json();
+      setAlertas(Array.isArray(dataAlertas) ? dataAlertas : []);
+    } catch (e) {
+      console.error("Error alertas", e);
+      setAlertas([]);
+    }
+
+    try {
+      const resResumen = await fetch("https://rent-manager-6vrc.onrender.com/alertas/resumen");
+      const dataResumen = await resResumen.json();
+      setResumen(dataResumen);
+    } catch (e) {
+      console.error("Error resumen", e);
+    }
+
+    try {
+      const resContratos = await fetch("https://rent-manager-6vrc.onrender.com/contratos/");
+      const dataContratos = await resContratos.json();
+      setContratos(Array.isArray(dataContratos) ? dataContratos : []);
+    } catch (e) {
+      console.error("Error contratos", e);
+      setContratos([]);
+    }
   };
 
   useEffect(() => {
@@ -209,7 +232,7 @@ export default function Home() {
       {/* 📄 LISTA */}
       <h2>Inquilinos</h2>
 
-      {inquilinos.map((inq) => (
+      {inquilinos?.map((inq) => (
         <div
           key={inq.id}
           style={{
@@ -295,7 +318,7 @@ export default function Home() {
       <button onClick={crearContrato}>Crear contrato</button>
 
       {/* 📄 Lista contratos */}
-      {contratos.map((c) => (
+      {contratos?.map((c) => (
         <div
           key={c.id}
           style={{
@@ -319,10 +342,5 @@ export default function Home() {
         </div>
       ))}
     </div>
-    
-
-      
-
-
   );
 }
